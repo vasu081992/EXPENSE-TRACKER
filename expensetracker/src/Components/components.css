@@ -1,0 +1,40 @@
+/* Overlay styles */
+.Overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5); /* semi-transparent black */
+/* Ensure the overlay is on top of other content */
+}
+
+/* Modal content styles */
+.Modal {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); /* Drop shadow effect */
+  /* Ensure the modal is on top of the overlay */
+    max-width: 80%;
+    max-height: 80%;
+    overflow: auto;
+    z-index: 10000; 
+}
+
+.expense-tracker {
+
+  height:181px;
+  width:355px;
+  background-color: #9B9B9B;
+  border-radius: 15px;
+}
+
+.expense-total{
+  display:flex;
+  gap:20px;
+}
