@@ -15,14 +15,23 @@ const Home = () =>{
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [modalExpenseIsOpen, setmodalExpense] = useState(false);
     const[expense,setexpense]=useState(0)
+    const[expenseList,setExpenseList] =useState([])
 
-
+    console.log(expenseList)
+    
     useEffect(()=>{
      
         console.log("expense changed so use effect is running")
 
+        expenselistAdd()
+
     },[balance])
 
+    const expenselistAdd = ()=>{
+   
+         
+
+    }
 
     console.log("balance",balance)
 
@@ -66,7 +75,13 @@ const Home = () =>{
 
 <Modal isOpen={modalExpenseIsOpen} setIsOpen={setmodalExpense}>
 
-<FormExpense setisOpen={setmodalExpense} setexpense={setexpense} setbalance={setbalance} balance={balance}/>
+<FormExpense 
+setisOpen={setmodalExpense}
+setexpense={setexpense}
+setbalance={setbalance}
+balance={balance}
+expenseList={expenseList}
+setExpenseList={setExpenseList} />
 
 </Modal>
 

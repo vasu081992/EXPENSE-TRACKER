@@ -3,10 +3,8 @@ import React from 'react'
 import { useState } from 'react';
 
 
-export default function FormExpense({setisOpen,setexpense,setbalance,balance}) {
+export default function FormExpense({setisOpen,setexpense,setbalance,balance,expenseList,setExpenseList}) {
 
-
-     const [inputText,setInputText] = useState(0)
     
       const[form,setform]=useState({
         title:'',
@@ -25,7 +23,14 @@ export default function FormExpense({setisOpen,setexpense,setbalance,balance}) {
           
       setbalance((prev)=>prev-Number(form.price))
 
-      setform({...form,price:0})
+    setExpenseList((prev)=>[{...form},...prev])
+
+      setform({
+        title: '',
+        category: '',
+        price: '',
+        date: '',
+    })
       
       setisOpen(false)
 
