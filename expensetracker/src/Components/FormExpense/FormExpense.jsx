@@ -23,7 +23,9 @@ export default function FormExpense({setisOpen,setexpense,setbalance,balance,exp
           
       setbalance((prev)=>prev-Number(form.price))
 
-    setExpenseList((prev)=>[{...form},...prev])
+      const lastId = expenseList.length > 0 ? expenseList[0].id : 0
+
+    setExpenseList((prev)=>[{...form,id:lastId+1},...prev])
 
       setform({
         title: '',
