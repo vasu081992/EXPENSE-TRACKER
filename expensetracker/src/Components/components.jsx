@@ -11,27 +11,43 @@ import FormExpense from './FormExpense/FormExpense'
 const Home = () =>{
 
  
-    const [balance, setbalance]=useState(5000)
+    const [balance, setbalance]=useState(0)
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [modalExpenseIsOpen, setmodalExpense] = useState(false);
     const[expense,setexpense]=useState(0)
     const[expenseList,setExpenseList] =useState([])
+    const [isMounted, setIsMounted] = useState(false);
+
+console.log("use effect mount state",isMounted)
 
     console.log(expenseList)
-    
-    useEffect(()=>{
-     
-        console.log("expense changed so use effect is running")
 
-        expenselistAdd()
+    useEffect(()=>{
+
+      const balance= localStorage.getItem("balance")
+
+     if(balance){
+            setbalance(Number(balance))
+     }
+     else {
+        setbalance(5000);
+        localStorage.setItem("balance", 5000);
+
+     }
+    setIsMounted(true);
+
+    },[])
+
+    useEffect(()=>{
+        
+        if(isMounted){
+        localStorage.setItem("balance",balance)
+
+        }
 
     },[balance])
 
-    const expenselistAdd = ()=>{
-   
-         
-
-    }
+  
 
     console.log("balance",balance)
 
