@@ -8,10 +8,9 @@ import { BiCameraMovie } from "react-icons/bi";
 import { FaRupeeSign } from "react-icons/fa";
 
 
-export default function TransactionCard({title,price,date,category,handleDelete}) {
+export default function TransactionCard({title,price,date,category,handleDelete,handleEdit}) {
 
-
-  
+   
     return (
     <div className={styles.card}>
      
@@ -19,7 +18,9 @@ export default function TransactionCard({title,price,date,category,handleDelete}
     <p> <FaRupeeSign /> {price} </p>
     <p> {date} </p>
     <p> {category} </p>
+    <button className={styles.cardDelete} onClick={handleEdit}>
     <MdEdit />
+    </button>
     <button className={styles.cardDelete} onClick={handleDelete}>
     <IoIosClose/>                   
      </button>

@@ -17,6 +17,9 @@ const Home = () =>{
     const[expense,setexpense]=useState(0)
     const[expenseList,setExpenseList] =useState([])
     const [isMounted, setIsMounted] = useState(false);
+    const [editId, setEditId] = useState(0)
+    const [isDisplayEditor, setIsDisplayEditor] = useState(false)
+  
 
 console.log("use effect mount state",isMounted)
 
@@ -34,12 +37,23 @@ console.log("use effect mount state",isMounted)
         localStorage.setItem("balance", 5000);
 
      }
+
+     const items = JSON.parse(localStorage.getItem("expenses"));
+
+
+     setExpenseList(items || []);
+
     setIsMounted(true);
 
     },[])
 
     useEffect(()=>{
         
+        if (expenseList.length > 0 || isMounted) {
+            localStorage.setItem("expenses", JSON.stringify(expenseList));
+          }
+
+          
         if (expenseList.length > 0) {
             setexpense(
               expenseList.reduce(
@@ -85,6 +99,13 @@ console.log("use effect mount state",isMounted)
         ))
     }
 
+    const handleEdit = (id)=>{
+   
+           setEditId(id)
+        setIsDisplayEditor(true)
+
+    }
+
     const Card = ({buttonName,amount,onClick})=>{
 
         return (
@@ -119,7 +140,7 @@ expenseList.length>0? (
     expenseList.map((expense)=>(
     <div>
   
-  <TransactionCard title={expense.title} price={expense.price} date={expense.date} category={expense.category} handleDelete={()=>handleDelete(expense.id)}/>
+  <TransactionCard title={expense.title} price={expense.price} date={expense.date} category={expense.category} handleDelete={()=>handleDelete(expense.id)} handleEdit={()=>handleEdit(expense.id)}/>
 
     </div>
     )
@@ -154,6 +175,17 @@ setExpenseList={setExpenseList} />
 
 </Modal>
 
+
+<Modal isOpen={isDisplayEditor} setIsOpen={setIsDisplayEditor}>
+                <FormExpense
+                    editId={editId}
+                    expenseList={expenseList}
+                    setExpenseList={setExpenseList}
+                    setisOpen={setIsDisplayEditor}
+                    balance={balance}
+                    setBalance={setbalance}
+                />
+            </Modal>
 
 
 </>

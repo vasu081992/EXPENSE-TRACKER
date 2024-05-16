@@ -1,9 +1,10 @@
 
 import React from 'react'
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
+import { useSnackbar } from 'notistack';
 
 
-export default function FormExpense({setisOpen,setexpense,setbalance,balance,expenseList,setExpenseList}) {
+export default function FormExpense({setisOpen,setexpense,editId,setbalance,balance,expenseList,setExpenseList}) {
 
     
       const[form,setform]=useState({
@@ -12,6 +13,7 @@ export default function FormExpense({setisOpen,setexpense,setbalance,balance,exp
         category:'',
         date:''
       })
+      const { enqueueSnackbar } = useSnackbar();
 
       console.log("form data",form)
 
@@ -38,12 +40,56 @@ export default function FormExpense({setisOpen,setexpense,setbalance,balance,exp
 
     }
 
+    const handleEdit = (e) => {
+        e.preventDefault()
+
+        const updated = expenseList.map(item => {
+            if (item.id === editId) {
+
+                const priceDifference = item.price - Number(form.price)
+
+                if (priceDifference < 0 && Math.abs(priceDifference) > balance) {
+                    enqueueSnackbar("Price should not exceed the wallet balance", { variant: "warning" })
+                    setisOpen(false)
+                    return { ...item }
+                }
+
+                setbalance(prev => prev + priceDifference)
+                return { ...form, id: editId }
+
+
+            }
+            else {
+                return item
+            }
+        })
+
+        setExpenseList(updated)
+
+        setisOpen(false)
+    }
+
+    useEffect(() => {
+
+        if (editId) {
+            const expenseData = expenseList.find(item => item.id === editId)
+
+            setform({
+                title: expenseData.title,
+                category: expenseData.category,
+                price: expenseData.price,
+                date: expenseData.date
+            })
+
+        }
+
+    }, [editId])
 
     const handleClose = () =>{
         setisOpen(false)
     }
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={editId ? handleEdit : handleSubmit}>
         <input type="text" placeholder="Title.." required value={form.title} onChange={(e) => setform({ ...form, title: e.target.value })}
 />
 
@@ -61,7 +107,7 @@ export default function FormExpense({setisOpen,setexpense,setbalance,balance,exp
   <option value="entertainment">entertainment</option>
 </select>
 
-<input type="date"  value={form.date} onChange={(e)=>setform({...form,date:e.target.value})}/>
+<input type="date"  value={form.date} onChange={(e)=>setform({...form,date:e.target.value}) } required/>
 
     <button type="submit">Add Expense</button> {/*this submission will trigger function at submit in form*/}
     <button onClick={handleClose}>Cancel</button>
