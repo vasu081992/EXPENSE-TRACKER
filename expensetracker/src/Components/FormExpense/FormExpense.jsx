@@ -18,7 +18,8 @@ export default function FormExpense({setisOpen,setexpense,editId,setbalance,bala
       console.log("form data",form)
 
     const handleSubmit = (e) =>{
-
+ 
+        console.log("submit is called")
       e.preventDefault();
 
       setexpense((prev)=>(prev)+Number(form.price))
@@ -40,7 +41,26 @@ export default function FormExpense({setisOpen,setexpense,editId,setbalance,bala
 
     }
 
+useEffect(()=>{
+ 
+    if(editId){
+   let matchedItem = expenseList.find((expense)=>expense.id === editId)
+
+    setform({
+        price:matchedItem.price,
+        category:matchedItem.category,
+        title:matchedItem.title,
+        date:matchedItem.date
+  })
+}
+  
+console.log("editId",editId)
+},[editId])
+
     const handleEdit = (e) => {
+
+        console.log("edit handle is called")
+
         e.preventDefault()
 
         const updated = expenseList.map(item => {
@@ -62,34 +82,23 @@ export default function FormExpense({setisOpen,setexpense,editId,setbalance,bala
             else {
                 return item
             }
-        })
+    })
+        
+            setExpenseList(updated)
 
-        setExpenseList(updated)
+            setisOpen(false)
 
-        setisOpen(false)
-    }
 
-    useEffect(() => {
+}
 
-        if (editId) {
-            const expenseData = expenseList.find(item => item.id === editId)
 
-            setform({
-                title: expenseData.title,
-                category: expenseData.category,
-                price: expenseData.price,
-                date: expenseData.date
-            })
-
-        }
-
-    }, [editId])
 
     const handleClose = () =>{
         setisOpen(false)
     }
   return (
     <form onSubmit={editId ? handleEdit : handleSubmit}>
+        <h6>{editId? "Edit Expenses" : "Add Expenses"}</h6>
         <input type="text" placeholder="Title.." required value={form.title} onChange={(e) => setform({ ...form, title: e.target.value })}
 />
 

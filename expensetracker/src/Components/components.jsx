@@ -17,9 +17,23 @@ const Home = () =>{
     const[expense,setexpense]=useState(0)
     const[expenseList,setExpenseList] =useState([])
     const [isMounted, setIsMounted] = useState(false);
-    const [editId, setEditId] = useState(0)
-    const [isDisplayEditor, setIsDisplayEditor] = useState(false)
-  
+   const [ edit,setEdit]= useState(0)
+   const [editDialog,setEditDialog]=useState(false)
+
+   const [categorySpends, setCategorySpends] = useState({
+    food: 0,
+    entertainment: 0,
+    travel: 0,
+  });
+  const [categoryCount, setCategoryCount] = useState({
+    food: 0,
+    entertainment: 0,
+    travel: 0,
+  });
+
+  console.log("categorySpends",categorySpends)
+  console.log("categoryCount",categoryCount)
+
 
 console.log("use effect mount state",isMounted)
 
@@ -66,6 +80,44 @@ console.log("use effect mount state",isMounted)
             setexpense(0);
           }
 
+   let foodCount = 0;
+   let entertainmentCount = 0;
+   let travelCount = 0;
+
+   let foodExpenses = 0;
+   let entertainmentExpenses = 0
+   let travelExpenses =0
+
+
+
+   expenseList.forEach((item)=>{
+  if(item.category==='food'){
+    foodExpenses += Number(item.price)
+    foodCount++
+  }
+  else if(item.category==='entertainment'){
+    entertainmentExpenses += Number(item.price)
+  entertainmentCount++
+  }
+  else if(item.category==='travel'){
+    travelExpenses += Number(item.price)
+    travelCount++
+  }
+   })
+
+   setCategoryCount({
+    food: foodCount,
+    entertainment:entertainmentCount ,
+    travel: travelCount,
+   })
+
+   setCategorySpends({
+    food: foodExpenses,
+    entertainment: entertainmentExpenses,
+    travel: travelExpenses,
+   })
+
+
     },[expenseList])
 
     useEffect(()=>{
@@ -99,12 +151,10 @@ console.log("use effect mount state",isMounted)
         ))
     }
 
-    const handleEdit = (id)=>{
-   
-           setEditId(id)
-        setIsDisplayEditor(true)
-
-    }
+ const handleEdit = (id)=>{
+    setEdit(id);
+    setEditDialog(true)
+ }
 
     const Card = ({buttonName,amount,onClick})=>{
 
@@ -176,14 +226,14 @@ setExpenseList={setExpenseList} />
 </Modal>
 
 
-<Modal isOpen={isDisplayEditor} setIsOpen={setIsDisplayEditor}>
+<Modal isOpen={editDialog} setIsOpen={setEditDialog}>
                 <FormExpense
-                    editId={editId}
                     expenseList={expenseList}
                     setExpenseList={setExpenseList}
-                    setisOpen={setIsDisplayEditor}
+                    setisOpen={setEditDialog}
                     balance={balance}
-                    setBalance={setbalance}
+                    setbalance={setbalance}
+                    editId={edit}
                 />
             </Modal>
 
